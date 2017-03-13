@@ -1,6 +1,8 @@
 package cn.bigniu.whathapp;
 
 import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -19,6 +21,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!checkLogin()) {
+            startIntent(LoginActivity.class, null);
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,6 +47,27 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    /*
+    check user login
+     */
+    private boolean checkLogin() {
+        return false;
+    }
+
+    public void startIntent(Class<?> cls, Bundle bundle) {
+        this.startIntent(this, cls, bundle);
+    }
+
+    public void startIntent(Context context, Class<?> cls, Bundle bundle) {
+        Intent intent = new Intent(context, cls);
+
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+
+        context.startActivity(intent);
     }
 
     @Override
