@@ -30,6 +30,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +40,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import cn.bigniu.whathapp.api.Account;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -55,13 +54,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -324,14 +316,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            JSONObject result = Account.login(mMobile, mPassword);
             try {
-                String result = post("http://192.168.1.16:3000/account/login", "{'mobile':'18616023612','password':'pwd'}");
-                Log.d("httpResponse", result);
-            } catch (IOException e) {
+                if (result.getInt("errcode") == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (JSONException e) {
                 e.printStackTrace();
                 return false;
             }
-            return true;
+
         }
 
         @Override
@@ -353,18 +349,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
 
-        public final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        OkHttpClient client = new OkHttpClient();
 
-        String post(String url, String json) throws IOException {
-            RequestBody body = RequestBody.create(JSON, json);
-            Request request = new Request.Builder()
-                    .url(url)
-                    .post(body)
-                    .build();
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        }
     }
 }
 
