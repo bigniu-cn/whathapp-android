@@ -17,13 +17,13 @@ import okhttp3.Response;
 
 public class BaseApi {
 
-    static String Host = "http://192.168.1.15:3000";
+    static String Host = "http://localhost:3000";
     static OkHttpClient client = new OkHttpClient();
     static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 
-    static JSONObject post(String api_path, JSONObject api_params) {
-        JSONObject result = null;
+    static Result post(String api_path, JSONObject api_params) {
+        Result result = null;
         RequestBody body = RequestBody.create(JSON, api_params.toString());
         Request request = new Request.Builder()
                 .url(Host + api_path)
@@ -33,7 +33,9 @@ public class BaseApi {
         try {
             response = client.newCall(request).execute();
             String responseBodyStr = response.body().string();
-            result = new JSONObject(responseBodyStr);
+            result = new Result(responseBodyStr);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
