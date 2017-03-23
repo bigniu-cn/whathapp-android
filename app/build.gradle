@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         whathapp {
+            storeFile file('../keystore/whathapp.jks')
+            keyAlias 'key0'
+            keyPassword 'gabryzhong'
+            storePassword 'gabryzhong'
         }
     }
     compileSdkVersion 25
