@@ -15,8 +15,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.MapView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private MapView _mapView;
+    private AMap _aMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +54,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        _mapView = (MapView) findViewById(R.id.main_map);
+        _aMap = _mapView.getMap();
     }
 
     /*
     check user login
      */
     private boolean checkLogin() {
-        return false;
+        return true;
     }
 
     public void startIntent(Class<?> cls, Bundle bundle) {
